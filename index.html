@@ -1,0 +1,167 @@
+<!-- ACTIVIDAD 15
+objetivo: crear un cronometro funcional usando el objeto setInterval para controlar el tiempo.
+descripcion: implementar un cronometro que tenga botones para iniciar, pausar y reiniciar el tiempo.
+
+ALUMNA: AMÉRICA JAZMIN ESTRADA HERNANDEZ 
+ -->
+
+ <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cronómetro</title>
+  <style>
+    /* Estilos generales */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Estilo del cuerpo de la página, centrando el contenido */
+    body {
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #6e45e2, #88d3ce);
+    }
+
+    /* Estilo del contenedor del cronómetro */
+    .cronometro {
+      background: rgba(255, 255, 255, 0.15); /* Fondo translúcido */
+      backdrop-filter: blur(10px); /* Filtro de desenfoque */
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25); /* Sombra */
+      text-align: center;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    /* Estilo del título CRONÓMETRO */
+    .cronometro h2 {
+      font-size: 2.5rem; /* Tamaño de fuente grande */
+      font-weight: bold; /* Negrita */
+      color: #fff;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra del texto */
+    }
+
+    /* Estilo del display del cronómetro */
+    #display {
+      font-size: 4rem;
+      color: #fff;
+      margin-bottom: 20px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra del texto */
+    }
+
+    /* Estilo de los botones */
+    button {
+      padding: 15px 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.1); /* Fondo semi-transparente */
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      margin: 5px;
+      transition: background-color 0.3s ease; /* Transición suave en hover */
+    }
+
+    /* Efecto hover de los botones */
+    button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Estilo de los botones deshabilitados */
+    button:disabled {
+      background-color: rgba(255, 255, 255, 0.05);
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="cronometro">
+    
+    <h2>CRONÓMETRO</h2>
+    
+    <h1 id="display">00:00:00</h1>
+    
+    <!-- Botones para controlar el cronómetro -->
+    <button id="start">Iniciar</button>
+    <button id="pause" disabled>Pausar</button>
+    <button id="reset" disabled>Reiniciar</button>
+  </div>
+
+  <script>
+    /* Inicialización de variables para el tiempo */
+    let hours = 0, minutes = 0, seconds = 0;
+    let intervalId = null; // Variable para almacenar el identificador del intervalo
+
+    /* Selección de elementos HTML */
+    const display = document.getElementById('display');
+    const startButton = document.getElementById('start');
+    const pauseButton = document.getElementById('pause');
+    const resetButton = document.getElementById('reset');
+
+    /* Función para actualizar el display del cronómetro */
+    function updateDisplay() {
+      const format = (unit) => String(unit).padStart(2, '0'); // Formatea las unidades a dos dígitos
+      display.textContent = `${format(hours)}:${format(minutes)}:${format(seconds)}`;
+    }
+
+    /* Función para iniciar el cronómetro */
+    function startTimer() {
+      intervalId = setInterval(() => {
+        seconds++;
+        if (seconds === 60) {
+          seconds = 0;
+          minutes++;
+        }
+        if (minutes === 60) {
+          minutes = 0;
+          hours++;
+        }
+        updateDisplay(); // Actualiza el display cada segundo
+      }, 1000);
+
+      /* Deshabilita el botón de iniciar y habilita los otros */
+      startButton.disabled = true;
+      pauseButton.disabled = false;
+      resetButton.disabled = false;
+    }
+
+    /* Función para pausar el cronómetro */
+    function pauseTimer() {
+      clearInterval(intervalId); // Detiene el intervalo
+      startButton.disabled = false;
+      pauseButton.disabled = true; // Deshabilita el botón de pausa
+    }
+
+    /* Función para reiniciar el cronómetro */
+    function resetTimer() {
+      clearInterval(intervalId); // Detiene el intervalo
+      hours = 0;
+      minutes = 0;
+      seconds = 0;
+      updateDisplay(); // Restablece el display a 00:00:00
+      startButton.disabled = false;
+      pauseButton.disabled = true;
+      resetButton.disabled = true;
+    }
+
+    /* Asigna los eventos a los botones */
+    startButton.addEventListener('click', startTimer);
+    pauseButton.addEventListener('click', pauseTimer);
+    resetButton.addEventListener('click', resetTimer);
+
+    updateDisplay(); // Inicializa el display en 00:00:00
+  </script>
+</body>
+</html>
